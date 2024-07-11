@@ -35,20 +35,20 @@ namada:
   # install sccache
   RUN cargo install sccache --locked
 
-  # install cargo sweep
-  RUN cargo install cargo-sweep --locked
+  # install cargo cache
+  RUN cargo install cargo-cache
 
   # install llvm-cov
   RUN cargo install cargo-llvm-cov --locked
   RUN cargo +nightly-2024-05-15-x86_64 install cargo-llvm-cov --locked
 
-  # install rocksdb
+  # download rocksdb
   GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
   RUN cd rocksdb && make shared_lib
   RUN echo /rocksdb | tee /etc/ld.so.conf.d/rocksdb.conf
   RUN ldconfig
 
-  # install mold
+  # download mold
   RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
   RUN tar --strip-components 2 -xvzf mold.tar.gz mold-2.32.1-x86_64-linux/bin/mold
   RUN mv mold /usr/local/bin
@@ -87,6 +87,9 @@ wasm:
 
   RUN rustup toolchain install 1.78.0 --profile minimal
   RUN rustup target add wasm32-unknown-unknown
+
+  # install cargo cache
+  RUN cargo install cargo-cache
 
   # download wasm-opt
   RUN curl -o binaryen.tar.gz -LO https://github.com/WebAssembly/binaryen/releases/download/version_${wasm_opt_version}/binaryen-version_${wasm_opt_version}-x86_64-linux.tar.gz
