@@ -36,3 +36,5 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Run build
       run: earthly +build
+      env:
+        EARTHLY_PUSH: ${{ github.ref == 'refs/heads/main' }}

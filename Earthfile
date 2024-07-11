@@ -67,5 +67,26 @@ namada:
   RUN tar --strip-components 2 -xvzf binaryen.tar.gz binaryen-version_${wasm_opt_version}/bin/wasm-opt
   RUN mv wasm-opt /usr/local/bin
 
+wasm:
+  FROM rust:1.78.0-bookworm
+
+  ARG wasm_opt_version=118
+
+  WORKDIR /__w/namada/namada
+
+  RUN apt-get update -y
+  RUN apt-get install -y protobuf-compiler 
+  RUN apt-get install -y libudev-dev
+  RUN apt-get install -y parallel
+
+  RUN rustup toolchain install 1.78.0 --profile minimal
+  RUN rustup target add wasm32-unknown-unknown
+
+  # download wasm-opt
+  RUN curl -o binaryen.tar.gz -LO https://github.com/WebAssembly/binaryen/releases/download/version_${wasm_opt_version}/binaryen-version_${wasm_opt_version}-x86_64-linux.tar.gz
+  RUN tar --strip-components 2 -xvzf binaryen.tar.gz binaryen-version_${wasm_opt_version}/bin/wasm-opt
+  RUN mv wasm-opt /usr/local/bin
+
 build:
   BUILD +namada
+  BUILD +wasm
