@@ -19,6 +19,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        command: [namada, wasm]
+
     env:
       FORCE_COLOR: 1
     steps:
@@ -35,6 +40,6 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Run build
-      run: earthly --push +build
+      run: earthly --push +${{ matrix.command }}
       env:
         EARTHLY_PUSH: ${{ github.ref == 'refs/heads/main' }}

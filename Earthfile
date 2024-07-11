@@ -94,8 +94,4 @@ wasm:
   RUN mv wasm-opt /usr/local/bin
   RUN chmod +x /usr/local/bin/wasm-opt
 
-build:
-  BUILD +namada
-  BUILD +wasm
-
   SAVE IMAGE ghcr.io/heliaxdev/namada-ci:wasm-latest ghcr.io/heliaxdev/namada-ci:wasm-main
