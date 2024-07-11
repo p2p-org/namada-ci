@@ -35,6 +35,6 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Run build
-      run: earthly +build
+      run: earthly --push +build
       env:
         EARTHLY_PUSH: ${{ github.ref == 'refs/heads/main' }}

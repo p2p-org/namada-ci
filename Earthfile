@@ -52,20 +52,26 @@ namada:
   RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
   RUN tar --strip-components 2 -xvzf mold.tar.gz mold-2.32.1-x86_64-linux/bin/mold
   RUN mv mold /usr/local/bin
+  RUN chmod +x /usr/local/bin/mold
 
   # download gaia 
   RUN curl -o gaiad -LO https://github.com/cosmos/gaia/releases/download/v${gaia_version}/gaiad-v${gaia_version}-linux-amd64
   RUN mv gaiad /usr/local/bin
+  RUN chmod +x /usr/local/bin/gaiad
 
   # download cometbft
   RUN curl -o cometbft.tar.gz -LO https://github.com/cometbft/cometbft/releases/download/v${cometbft_version}/cometbft_${cometbft_version}_linux_amd64.tar.gz
   RUN tar -xvzf cometbft.tar.gz
   RUN mv cometbft /usr/local/bin
+  RUN chmod +x /usr/local/bin/cometbft
 
   # download wasm-opt
   RUN curl -o binaryen.tar.gz -LO https://github.com/WebAssembly/binaryen/releases/download/version_${wasm_opt_version}/binaryen-version_${wasm_opt_version}-x86_64-linux.tar.gz
   RUN tar --strip-components 2 -xvzf binaryen.tar.gz binaryen-version_${wasm_opt_version}/bin/wasm-opt
   RUN mv wasm-opt /usr/local/bin
+  RUN chmod +x /usr/local/bin/wasm-opt
+
+  SAVE IMAGE ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
 wasm:
   FROM rust:1.78.0-bookworm
@@ -86,7 +92,10 @@ wasm:
   RUN curl -o binaryen.tar.gz -LO https://github.com/WebAssembly/binaryen/releases/download/version_${wasm_opt_version}/binaryen-version_${wasm_opt_version}-x86_64-linux.tar.gz
   RUN tar --strip-components 2 -xvzf binaryen.tar.gz binaryen-version_${wasm_opt_version}/bin/wasm-opt
   RUN mv wasm-opt /usr/local/bin
+  RUN chmod +x /usr/local/bin/wasm-opt
 
 build:
   BUILD +namada
   BUILD +wasm
+
+  SAVE IMAGE ghcr.io/heliaxdev/namada-ci:wasm-latest ghcr.io/heliaxdev/namada-ci:wasm-main
