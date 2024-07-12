@@ -78,6 +78,8 @@ namada:
   RUN mv wasm-opt /usr/local/bin
   RUN chmod +x /usr/local/bin/wasm-opt
 
+  RUN cargo cache --autoclean-expensive
+
   SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
 wasm:
@@ -97,8 +99,9 @@ wasm:
   RUN apt-get install -y clang-tools clang
   RUN apt-get install -y parallel
 
-  RUN rustup toolchain install $toolchain --profile minimal
+  RUN rustup toolchain install $toolchain --profile minimal --no-self-update
   RUN rustup target add wasm32-unknown-unknown
+  RUN rustup default $toolchain-x86_64-unknown-linux-gnu
 
   # install cargo cache
   RUN cargo install cargo-cache
