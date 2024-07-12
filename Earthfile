@@ -83,6 +83,7 @@ wasm:
   RUN apt-get update -y
   RUN apt-get install -y protobuf-compiler 
   RUN apt-get install -y libudev-dev
+  RUN apt-get install -y build-essential
   RUN apt-get install -y clang-tools clang
   RUN apt-get install -y parallel
 
