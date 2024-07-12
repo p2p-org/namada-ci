@@ -5,7 +5,10 @@ namada:
 
   WORKDIR /__w/namada/namada
 
-  ARG nightly=nightly-2024-05-15-x86_64
+  ENV CARGO_HOME="/__w/namada/namada/.cargo"
+
+  ARG toolchain=1.78.0
+  ARG nightly_toolchain=nightly-2024-05-15
   ARG rocksdb_version=8.10.0
   ARG gaia_version=15.2.0
   ARG cometbft_version=0.37.2
@@ -21,17 +24,17 @@ namada:
   RUN apt-get install -y gcc
   RUN apt-get install -y parallel
     
-  RUN rustup toolchain install 1.78.0-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
+  RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add wasm32-unknown-unknown
-  RUN rustup toolchain install $nightly-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
-  RUN rustup target add --toolchain $nightly wasm32-unknown-unknown
-  RUN rustup default 1.78.0-x86_64-unknown-linux-gnu
+  RUN rustup toolchain install $nightly_toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
+  RUN rustup target add --toolchain $nightly_toolchain wasm32-unknown-unknown
+  RUN rustup default $toolchain-x86_64-unknown-linux-gnu
 
   # download masp artifacts
-  RUN mkdir -p .masp-params
-  RUN curl -o .masp-params/masp-spend.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-spend.params\?raw\=true
-  RUN curl -o .masp-params/masp-output.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-output.params?raw=true
-  RUN curl -o .masp-params/masp-convert.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-convert.params?raw=true
+  RUN mkdir -p /__w/namada/namada/.masp-params
+  RUN curl -o /__w/namada/namada/.masp-params/masp-spend.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-spend.params\?raw\=true
+  RUN curl -o /__w/namada/namada/.masp-params/masp-output.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-output.params?raw=true
+  RUN curl -o /__w/namada/namada/.masp-params/masp-convert.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-convert.params?raw=true
 
   # install cargo nextest
   RUN cargo install cargo-nextest --locked
@@ -44,7 +47,7 @@ namada:
 
   # install llvm-cov
   RUN cargo install cargo-llvm-cov --locked
-  RUN cargo +$nightly install cargo-llvm-cov --locked
+  RUN cargo +$nightly_toolchain install cargo-llvm-cov --locked
 
   # download rocksdb
   GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
@@ -80,9 +83,12 @@ namada:
 wasm:
   FROM rust:1.78.0-bookworm
 
+  ARG toolchain=1.78.0
   ARG wasm_opt_version=118
 
   WORKDIR /__w/namada/namada
+
+  ENV CARGO_HOME="/__w/namada/namada/.cargo"
 
   RUN apt-get update -y
   RUN apt-get install -y protobuf-compiler 
@@ -91,7 +97,7 @@ wasm:
   RUN apt-get install -y clang-tools clang
   RUN apt-get install -y parallel
 
-  RUN rustup toolchain install 1.78.0 --profile minimal
+  RUN rustup toolchain install $toolchain --profile minimal
   RUN rustup target add wasm32-unknown-unknown
 
   # install cargo cache
