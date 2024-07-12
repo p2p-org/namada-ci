@@ -3,6 +3,7 @@ VERSION 0.8
 namada:
   FROM rust:1.78.0-bookworm
 
+  ARG nightly=nightly-2024-05-15-x86_64
   ARG rocksdb_version=8.10.0
   ARG gaia_version=15.2.0
   ARG cometbft_version=0.37.2
@@ -18,9 +19,10 @@ namada:
   RUN apt-get install -y gcc
   RUN apt-get install -y parallel
     
-  RUN rustup toolchain install 1.78.0-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src
-  RUN rustup toolchain install nightly-2024-05-15-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src
+  RUN rustup toolchain install 1.78.0-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add wasm32-unknown-unknown
+  RUN rustup toolchain install $nightly-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
+  RUN rustup target add --toolchain $nightly wasm32-unknown-unknown
   RUN rustup default 1.78.0-x86_64-unknown-linux-gnu
 
   # download masp artifacts
@@ -40,7 +42,7 @@ namada:
 
   # install llvm-cov
   RUN cargo install cargo-llvm-cov --locked
-  RUN cargo +nightly-2024-05-15-x86_64 install cargo-llvm-cov --locked
+  RUN cargo +$nightly install cargo-llvm-cov --locked
 
   # download rocksdb
   GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
