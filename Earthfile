@@ -3,6 +3,8 @@ VERSION 0.8
 namada:
   FROM rust:1.78.0-bookworm
 
+  WORKDIR /__w/namada/namada
+
   ARG nightly=nightly-2024-05-15-x86_64
   ARG rocksdb_version=8.10.0
   ARG gaia_version=15.2.0
