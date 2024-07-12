@@ -5,8 +5,6 @@ namada:
 
   WORKDIR /__w/namada/namada
 
-  ENV CARGO_HOME="/__w/namada/namada/.cargo"
-
   ARG toolchain=1.78.0
   ARG nightly_toolchain=nightly-2024-05-15
   ARG rocksdb_version=8.10.0
@@ -50,10 +48,10 @@ namada:
   RUN cargo +$nightly_toolchain install cargo-llvm-cov --locked
 
   # download rocksdb
-  GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
-  RUN cd rocksdb && make shared_lib
-  RUN echo /rocksdb | tee /etc/ld.so.conf.d/rocksdb.conf
-  RUN ldconfig
+  # GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
+  # RUN cd rocksdb && make shared_lib
+  # RUN echo /rocksdb | tee /etc/ld.so.conf.d/rocksdb.conf
+  # RUN ldconfig
 
   # download mold
   RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
@@ -90,13 +88,8 @@ wasm:
 
   WORKDIR /__w/namada/namada
 
-  ENV CARGO_HOME="/__w/namada/namada/.cargo"
-
   RUN apt-get update -y
   RUN apt-get install -y protobuf-compiler 
-  RUN apt-get install -y libudev-dev
-  RUN apt-get install -y build-essential
-  RUN apt-get install -y clang-tools clang
   RUN apt-get install -y parallel
 
   RUN rustup toolchain install $toolchain --profile minimal --no-self-update
