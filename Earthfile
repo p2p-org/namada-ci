@@ -79,8 +79,6 @@ namada:
   RUN mv wasm-opt /usr/local/bin
   RUN chmod +x /usr/local/bin/wasm-opt
 
-  RUN cargo cache --autoclean-expensive
-
   SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
 wasm:
@@ -99,8 +97,11 @@ wasm:
   RUN rustup target add wasm32-unknown-unknown
   RUN rustup default $toolchain-x86_64-unknown-linux-gnu
 
+  # install cargo binstall 
+  RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
   # install cargo cache
-  RUN cargo install cargo-cache
+  RUN cargo binstall cargo-cache --no-confirm
 
   # download wasm-opt
   RUN curl -o binaryen.tar.gz -LO https://github.com/WebAssembly/binaryen/releases/download/version_${wasm_opt_version}/binaryen-version_${wasm_opt_version}-x86_64-linux.tar.gz
