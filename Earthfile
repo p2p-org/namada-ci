@@ -29,22 +29,25 @@ namada:
   RUN rustup default $toolchain-x86_64-unknown-linux-gnu
 
   # download masp artifacts
-  RUN mkdir -p /__w/namada/namada/.masp-params
-  RUN curl -o /__w/namada/namada/.masp-params/masp-spend.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-spend.params\?raw\=true
-  RUN curl -o /__w/namada/namada/.masp-params/masp-output.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-output.params?raw=true
-  RUN curl -o /__w/namada/namada/.masp-params/masp-convert.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-convert.params?raw=true
+  RUN mkdir -p /masp/.masp-params
+  RUN curl -o /masp/.masp-params/masp-spend.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-spend.params\?raw\=true
+  RUN curl -o /masp/.masp-params/masp-output.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-output.params?raw=true
+  RUN curl -o /masp/.masp-params/masp-convert.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-convert.params?raw=true
+
+  # install cargo binstall 
+  RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
   # install cargo nextest
-  RUN cargo install cargo-nextest --locked
+  RUN cargo binstall cargo-nextest --no-confirm
 
   # install sccache
-  RUN cargo install sccache --locked
+  RUN cargo binstall sccache --no-confirm
 
   # install cargo cache
-  RUN cargo install cargo-cache
+  RUN cargo binstall cargo-cache --no-confirm
 
   # install llvm-cov
-  RUN cargo install cargo-llvm-cov --locked
+  RUN cargo binstall cargo-llvm-cov --no-confirm
   RUN cargo +$nightly_toolchain install cargo-llvm-cov --locked
 
   # download rocksdb
