@@ -46,15 +46,12 @@ namada:
   # install cargo cache
   RUN cargo binstall cargo-cache --no-confirm
 
+  # install cargo about
+  RUN cargo binstall cargo binstall cargo-about --no-confirm
+
   # install llvm-cov
   RUN cargo binstall cargo-llvm-cov --no-confirm
   RUN cargo +$nightly_toolchain install cargo-llvm-cov --locked
-
-  # download rocksdb
-  # GIT CLONE --branch v$rocksdb_version git@github.com:facebook/rocksdb.git rocksdb
-  # RUN cd rocksdb && make shared_lib
-  # RUN echo /rocksdb | tee /etc/ld.so.conf.d/rocksdb.conf
-  # RUN ldconfig
 
   # download mold
   RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
