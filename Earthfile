@@ -47,7 +47,7 @@ namada:
   RUN cargo binstall cargo-cache --no-confirm
 
   # install cargo about
-  RUN cargo binstall cargo binstall cargo-about --no-confirm
+  RUN cargo binstall cargo-about --no-confirm
 
   # install llvm-cov
   RUN cargo binstall cargo-llvm-cov --no-confirm
