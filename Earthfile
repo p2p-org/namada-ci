@@ -9,7 +9,7 @@ namada:
   ARG nightly_toolchain=nightly-2024-05-15
   ARG rocksdb_version=8.10.0
   ARG gaia_version=15.2.0
-  ARG cometbft_version=0.37.2
+  ARG cometbft_version=0.37.9
   ARG wasm_opt_version=118
 
   RUN apt-get update -y
