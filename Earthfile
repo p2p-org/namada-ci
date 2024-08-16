@@ -53,6 +53,12 @@ namada:
   RUN cargo binstall cargo-llvm-cov --no-confirm
   RUN cargo +$nightly_toolchain install cargo-llvm-cov --locked
 
+  # install rustfilt (for fuzzing)
+  RUN cargo install rustfilt
+
+  # install fuzz
+  RUN cargo install cargo-fuzz
+
   # download mold
   RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
   RUN tar --strip-components 2 -xvzf mold.tar.gz mold-2.32.1-x86_64-linux/bin/mold
