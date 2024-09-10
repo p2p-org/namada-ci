@@ -21,6 +21,16 @@ namada:
   RUN apt-get install -y pkg-config
   RUN apt-get install -y gcc
   RUN apt-get install -y parallel
+
+  # needed for speculos
+  RUN apt install -y \
+    git python3-pip pipx cmake gcc-arm-linux-gnueabihf libc6-dev-armhf-cross gdb-multiarch \
+    python3-pyqt5 python3-construct python3-flask-restful python3-jsonschema \
+    python3-mnemonic python3-pil python3-pyelftools python3-requests \
+    qemu-user-static libvncserver-dev
+
+  RUN pipx ensurepath
+  RUN pipx install speculos
     
   RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add wasm32-unknown-unknown
