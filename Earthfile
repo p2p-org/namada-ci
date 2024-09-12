@@ -9,8 +9,8 @@ namada:
   ARG nightly_toolchain=nightly-2024-05-15
   ARG rocksdb_version=8.10.0
   ARG gaia_version=19.1.0
-  ARG cometbft_version=0.37.9
-  ARG wasm_opt_version=118
+  ARG cometbft_version=0.37.11
+  ARG wasm_opt_version=119
 
   RUN apt-get update -y
   RUN apt-get install -y protobuf-compiler 
