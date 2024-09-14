@@ -1,12 +1,12 @@
 VERSION 0.8
 
 namada:
-  FROM rust:1.78.0-bookworm
+  FROM rust:1.81.0-bookworm
 
   WORKDIR /__w/namada/namada
 
-  ARG toolchain=1.78.0
-  ARG nightly_toolchain=nightly-2024-05-15
+  ARG toolchain=1.81.0
+  ARG nightly_toolchain=nightly-2024-09-08
   ARG rocksdb_version=8.10.0
   ARG gaia_version=19.1.0
   ARG cometbft_version=0.37.11
@@ -98,9 +98,9 @@ namada:
   SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
 wasm:
-  FROM rust:1.78.0-bookworm
+  FROM rust:1.81.0-bookworm
 
-  ARG toolchain=1.78.0
+  ARG toolchain=1.81.0
   ARG wasm_opt_version=118
 
   WORKDIR /__w/namada/namada
