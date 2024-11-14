@@ -1,5 +1,9 @@
 VERSION 0.8
 
+wasmd:
+  FROM cosmwasm/wasmd:v0.52.0
+  SAVE ARTIFACT /usr/bin/wasmd AS LOCAL wasmd
+
 namada:
   FROM rust:1.81.0-bookworm
 
@@ -9,6 +13,8 @@ namada:
   ARG nightly_toolchain=nightly-2024-09-08
   ARG rocksdb_version=8.10.0
   ARG gaia_version=19.1.0
+  ARG cw721_version=0.18.0
+  ARG ics721_version=0.1.13
   ARG cometbft_version=0.37.11
   ARG wasm_opt_version=119
 
@@ -79,6 +85,14 @@ namada:
   RUN curl -o gaiad -LO https://github.com/cosmos/gaia/releases/download/v${gaia_version}/gaiad-v${gaia_version}-linux-amd64
   RUN mv gaiad /usr/local/bin
   RUN chmod +x /usr/local/bin/gaiad
+
+  # install wasmd
+  COPY +wasmd/wasmd /usr/local/bin/wasmd
+  RUN chmod +x /usr/local/bin/wasmd
+
+  # download cosmwasm contracts
+  RUN curl -LO https://github.com/public-awesome/cw-nfts/releases/download/v${cw721_version}/cw721_base.wasm
+  RUN curl -LO https://github.com/public-awesome/cw-ics721/releases/download/v${ics721_version}/ics721_base.wasm
 
   # download cometbft
   RUN curl -o cometbft.tar.gz -LO https://github.com/cometbft/cometbft/releases/download/v${cometbft_version}/cometbft_${cometbft_version}_linux_amd64.tar.gz
