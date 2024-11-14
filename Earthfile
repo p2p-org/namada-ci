@@ -91,8 +91,9 @@ namada:
   RUN chmod +x /usr/local/bin/wasmd
 
   # download cosmwasm contracts
-  RUN curl -LO https://github.com/public-awesome/cw-nfts/releases/download/v${cw721_version}/cw721_base.wasm
-  RUN curl -LO https://github.com/public-awesome/cw-ics721/releases/download/v${ics721_version}/ics721_base.wasm
+  RUN mkdir -p /cosmwasm_contracts
+  RUN curl -L -o /cosmwasm_contracts/cw721_base.wasm https://github.com/public-awesome/cw-nfts/releases/download/v${cw721_version}/cw721_base.wasm
+  RUN curl -L -o /cosmwasm_contracts/ics721_base.wasm https://github.com/public-awesome/cw-ics721/releases/download/v${ics721_version}/ics721_base.wasm
 
   # download cometbft
   RUN curl -o cometbft.tar.gz -LO https://github.com/cometbft/cometbft/releases/download/v${cometbft_version}/cometbft_${cometbft_version}_linux_amd64.tar.gz
