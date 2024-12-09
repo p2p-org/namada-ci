@@ -27,6 +27,7 @@ namada:
   RUN apt-get install -y pkg-config
   RUN apt-get install -y gcc
   RUN apt-get install -y parallel
+  RUN apt-get install -y python3
 
   # needed for speculos
   RUN apt install -y \
