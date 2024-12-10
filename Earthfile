@@ -29,6 +29,8 @@ namada:
   RUN apt-get install -y parallel
   RUN apt-get install -y python3
 
+  RUN apt install python-is-python3
+
   # needed for speculos
   RUN apt install -y \
     git python3-pip pipx cmake gcc-arm-linux-gnueabihf libc6-dev-armhf-cross gdb-multiarch \
