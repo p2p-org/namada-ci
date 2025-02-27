@@ -5,11 +5,11 @@ wasmd:
   SAVE ARTIFACT /usr/bin/wasmd AS LOCAL wasmd
 
 namada:
-  FROM rust:1.81.0-bookworm
+  FROM rust:1.85.0-bookworm
 
   WORKDIR /__w/namada/namada
 
-  ARG toolchain=1.81.0
+  ARG toolchain=1.85.0
   ARG nightly_toolchain=nightly-2024-09-08
   ARG rocksdb_version=8.10.0
   ARG gaia_version=19.1.0
@@ -121,9 +121,9 @@ namada:
   SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
 wasm:
-  FROM rust:1.81.0-bookworm
+  FROM rust:1.85.0-bookworm
 
-  ARG toolchain=1.81.0
+  ARG toolchain=1.85.0
   ARG wasm_opt_version=118
 
   WORKDIR /__w/namada/namada
