@@ -5,7 +5,9 @@ wasmd:
   SAVE ARTIFACT /usr/bin/wasmd AS LOCAL wasmd
 
 namada:
-  FROM rust:1.81.0-bookworm
+  FROM ubuntu:24.04
+
+  ENV DEBIAN_FRONTEND=noninteractive
 
   WORKDIR /__w/namada/namada
 
@@ -19,6 +21,7 @@ namada:
   ARG wasm_opt_version=119
 
   RUN apt-get update -y
+  RUN apt-get install -y curl
   RUN apt-get install -y protobuf-compiler 
   RUN apt-get install -y build-essential 
   RUN apt-get install -y clang-tools clang
@@ -28,24 +31,45 @@ namada:
   RUN apt-get install -y gcc
   RUN apt-get install -y parallel
   RUN apt-get install -y python3
+  RUN apt-get install -y ca-certificates
 
-  RUN apt install python-is-python3
+  # install rust 
+  RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+  ENV PATH="/root/.cargo/bin:$PATH"
 
   # needed for speculos
-  RUN apt install -y \
-    git python3-pip pipx cmake gcc-arm-linux-gnueabihf libc6-dev-armhf-cross gdb-multiarch \
-    python3-pyqt5 python3-construct python3-flask-restful python3-jsonschema \
-    python3-mnemonic python3-pil python3-pyelftools python3-requests \
-    qemu-user-static libvncserver-dev
+  RUN apt-get install -y git
+  RUN apt-get install -y build-essential
+  RUN apt-get install -y ca-certificates
+  RUN apt-get install -y git
+  RUN apt-get install -y python3-pip
+  RUN apt-get install -y pipx
+  RUN apt-get install -y cmake
+  RUN apt-get install -y gcc-arm-linux-gnueabihf
+  RUN apt-get install -y libc6-dev-armhf-cross
+  RUN apt-get install -y gdb-multiarch
+  RUN apt-get install -y python3-pyqt5
+  RUN apt-get install -y python3-construct
+  RUN apt-get install -y python3-flask-restful
+  RUN apt-get install -y python3-jsonschema
+  RUN apt-get install -y python3-mnemonic
+  RUN apt-get install -y python3-pil
+  RUN apt-get install -y python3-pyelftools
+  RUN apt-get install -y python3-requests
+  RUN apt-get install -y qemu-user-static
+  RUN apt-get install -y libvncserver-dev
+  RUN apt-get install -y make
+  RUN apt-get install -y qtbase5-dev qtchooser qt5-qmake qttools5-dev-tools
 
   RUN pipx ensurepath
   RUN pipx install speculos
 
   # Needed for rust-rocksdb 0.23 build
   RUN apt install -y llvm
-  RUN ln -s /usr/lib/llvm-14/lib/libclang-14.so.1 /usr/lib/llvm-14/lib/libclang-14.so
-  ENV LIBCLANG_PATH /usr/lib/llvm-14/lib
-    
+  # RUN ln -s /usr/lib/llvm-14/lib/libclang-14.so.1 /usr/lib/llvm-14/lib/libclang-14.so -> doesn't work
+  # ENV LIBCLANG_PATH /usr/lib/llvm-14/lib -> ??
+  
+  # Install rust toolchains
   RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add wasm32-unknown-unknown
   RUN rustup toolchain install $nightly_toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview,rustc-codegen-cranelift-preview
@@ -117,6 +141,8 @@ namada:
 
   RUN mkdir -p /ledger-namada
   COPY artifacts/app_s2.elf /ledger-namada/app_s2.elf
+
+  RUN rm -rf /var/lib/apt/lists/*
 
   SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
 
