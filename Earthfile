@@ -33,6 +33,7 @@ namada:
   RUN apt-get install -y parallel
   RUN apt-get install -y python3
   RUN apt-get install -y ca-certificates
+  RUN apt-get install -y unzip
 
   # install rust 
   RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -66,7 +67,7 @@ namada:
   RUN pipx install speculos
     
   RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rust-analysis,rust-docs,rust-src,llvm-tools-preview
-  RUN rustup target add wasm32-unknown-unknown
+  RUN rustup target add --toolchain $toolchain wasm32-unknown-unknown
   RUN rustup toolchain install $nightly_toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rust-analysis,rust-docs,rust-src,llvm-tools-preview,rustc-codegen-cranelift-preview
   RUN rustup target add --toolchain $nightly_toolchain wasm32-unknown-unknown
   RUN rustup default $toolchain-x86_64-unknown-linux-gnu
