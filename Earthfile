@@ -33,6 +33,7 @@ namada:
   RUN apt-get install -y parallel
   RUN apt-get install -y python3
   RUN apt-get install -y ca-certificates
+  RUN apt-get install -y unzip
 
   # install rust 
   RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
