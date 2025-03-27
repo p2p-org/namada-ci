@@ -17,6 +17,7 @@ namada:
   ARG ics721_version=0.1.13
   ARG cometbft_version=0.37.11
   ARG wasm_opt_version=119
+  ARG mold_version=2.37.1
 
   RUN apt-get update -y
   RUN apt-get install -y protobuf-compiler 
@@ -84,8 +85,8 @@ namada:
   RUN cargo install cargo-fuzz
 
   # download mold
-  RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v2.32.1/mold-2.32.1-x86_64-linux.tar.gz
-  RUN tar --strip-components 2 -xvzf mold.tar.gz mold-2.32.1-x86_64-linux/bin/mold
+  RUN curl -o mold.tar.gz -LO https://github.com/rui314/mold/releases/download/v$mold_version/mold-$mold_version-x86_64-linux.tar.gz
+  RUN tar --strip-components 2 -xvzf mold.tar.gz mold-$mold_version-x86_64-linux/bin/mold
   RUN mv mold /usr/local/bin
   RUN chmod +x /usr/local/bin/mold
 
