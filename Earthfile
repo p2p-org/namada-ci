@@ -64,13 +64,7 @@ namada:
 
   RUN pipx ensurepath
   RUN pipx install speculos
-
-  # Needed for rust-rocksdb 0.23 build
-  RUN apt install -y llvm
-  # RUN ln -s /usr/lib/llvm-14/lib/libclang-14.so.1 /usr/lib/llvm-14/lib/libclang-14.so -> doesn't work
-  # ENV LIBCLANG_PATH /usr/lib/llvm-14/lib -> ??
-  
-  # Install rust toolchains
+    
   RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add wasm32-unknown-unknown
   RUN rustup toolchain install $nightly_toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rls,rust-analysis,rust-docs,rust-src,llvm-tools-preview,rustc-codegen-cranelift-preview
