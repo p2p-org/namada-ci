@@ -20,6 +20,7 @@ namada:
   ARG cometbft_version=0.37.11
   ARG wasm_opt_version=119
   ARG mold_version=2.37.1
+  ARG tag=namada-main
 
   RUN apt-get update -y
   RUN apt-get install -y curl
@@ -143,13 +144,14 @@ namada:
 
   RUN rm -rf /var/lib/apt/lists/*
 
-  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:namada-main
+  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:$tag
 
 wasm:
   FROM rust:1.85.1-bookworm
 
   ARG toolchain=1.85.1
   ARG wasm_opt_version=118
+  ARG tag=wasm-main
 
   WORKDIR /__w/namada/namada
 
@@ -173,4 +175,4 @@ wasm:
   RUN mv wasm-opt /usr/local/bin
   RUN chmod +x /usr/local/bin/wasm-opt
 
-  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:wasm-latest ghcr.io/heliaxdev/namada-ci:wasm-main
+  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:wasm-latest ghcr.io/heliaxdev/namada-ci:$tag
