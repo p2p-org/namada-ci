@@ -25,8 +25,8 @@ namada:
 
   RUN apt-get update -y
   RUN apt-get install -y curl
-  RUN apt-get install -y protobuf-compiler 
-  RUN apt-get install -y build-essential 
+  RUN apt-get install -y protobuf-compiler
+  RUN apt-get install -y build-essential
   RUN apt-get install -y clang-tools clang
   RUN apt-get install -y libudev-dev
   RUN apt-get install -y libssl-dev
@@ -61,7 +61,7 @@ namada:
   RUN apt-get install -y make
   RUN apt-get install -y qtbase5-dev qtchooser qt5-qmake qttools5-dev-tools
 
-  # install cmake 
+  # install cmake
   RUN apt-get remove --purge -y cmake && apt-get autoremove -y
   RUN wget https://github.com/Kitware/CMake/releases/download/v$cmake_version/cmake-$cmake_version-linux-x86_64.tar.gz
   RUN tar -xzf cmake-$cmake_version-linux-x86_64.tar.gz && mv cmake-$cmake_version-linux-x86_64/ /usr/local/cmake
@@ -73,13 +73,13 @@ namada:
   RUN pipx ensurepath
   RUN pipx install speculos
 
-  # install rust 
+  # install rust
   RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 
   ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
   ENV RUSTUP_HOME="/root/.rustup"
   ENV CARGO_HOME="/root/.cargo"
-    
+
   RUN rustup toolchain install $toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rls,rustfmt,rust-analysis,rust-docs,rust-src,llvm-tools-preview
   RUN rustup target add --toolchain $toolchain-x86_64-unknown-linux-gnu wasm32-unknown-unknown
   RUN rustup toolchain install $nightly_toolchain-x86_64-unknown-linux-gnu --no-self-update --component clippy,rustfmt,rust-analysis,rust-docs,rust-src,llvm-tools-preview,rustc-codegen-cranelift-preview
@@ -92,7 +92,7 @@ namada:
   RUN curl -o /masp/.masp-params/masp-output.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-output.params?raw=true
   RUN curl -o /masp/.masp-params/masp-convert.params -L https://github.com/anoma/masp-mpc/releases/download/namada-trusted-setup/masp-convert.params?raw=true
 
-  # install cargo binstall 
+  # install cargo binstall
   RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
   # install cargo nextest
@@ -123,7 +123,7 @@ namada:
   RUN mv mold /usr/local/bin
   RUN chmod +x /usr/local/bin/mold
 
-  # download gaia 
+  # download gaia
   RUN curl -o gaiad -LO https://github.com/cosmos/gaia/releases/download/v${gaia_version}/gaiad-v${gaia_version}-linux-amd64
   RUN mv gaiad /usr/local/bin
   RUN chmod +x /usr/local/bin/gaiad
@@ -154,7 +154,7 @@ namada:
 
   RUN rm -rf /var/lib/apt/lists/*
 
-  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:namada-latest ghcr.io/heliaxdev/namada-ci:$tag
+  SAVE IMAGE --push $tag
 
 wasm:
   FROM rust:1.85.1-bookworm
@@ -166,14 +166,14 @@ wasm:
   WORKDIR /__w/namada/namada
 
   RUN apt-get update -y
-  RUN apt-get install -y protobuf-compiler 
+  RUN apt-get install -y protobuf-compiler
   RUN apt-get install -y parallel
 
   RUN rustup toolchain install $toolchain --no-self-update --component cargo,rust-std,rustc,rls,rust-analysis,rust-docs
   RUN rustup target add wasm32-unknown-unknown
   RUN rustup default $toolchain-x86_64-unknown-linux-gnu
 
-  # install cargo binstall 
+  # install cargo binstall
   RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
   # install cargo cache
