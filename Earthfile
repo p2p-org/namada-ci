@@ -20,7 +20,7 @@ namada:
   ARG cometbft_version=0.37.11
   ARG wasm_opt_version=119
   ARG mold_version=2.37.1
-  ARG tag=namada-main
+  ARG tag=tooling-latest
   ARG cmake_version=3.20.0
 
   RUN apt-get update -y
@@ -185,4 +185,4 @@ wasm:
   RUN mv wasm-opt /usr/local/bin
   RUN chmod +x /usr/local/bin/wasm-opt
 
-  SAVE IMAGE --push ghcr.io/heliaxdev/namada-ci:wasm-latest ghcr.io/heliaxdev/namada-ci:$tag
+  SAVE IMAGE --push ghcr.io/p2p-org/namada-builds:wasm-latest $tag
